@@ -17,6 +17,7 @@ import { STRINGS } from '../../../assets/locales';
 import { getProductsAPI } from '../../../redux/product/product-thunk';
 import { ICONS } from '../../../assets/icons';
 import COLORS from '../../../assets/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Product = {
   id: string;
@@ -146,7 +147,7 @@ const DashboardScreen: React.FC = () => {
   
 
   return (
-    <View style={styles.safe}>
+    <SafeAreaView style={styles.safe}>
       <View style={styles.headerRow}>
         <TouchableOpacity
           onPress={() => openDrawer()
@@ -198,12 +199,13 @@ const DashboardScreen: React.FC = () => {
       <Modal
         visible={isFilterVisible}
         animationType="slide"
+        onTouchOutside={() => setFilterVisible(false)}
         transparent
         onRequestClose={() => setFilterVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback onPress={() => setFilterVisible(false)}>
-            <View  />
+            <View style={{ flex: 1 }} />
           </TouchableWithoutFeedback>
 
           <View style={styles.bottomSheet}>
@@ -254,7 +256,7 @@ const DashboardScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

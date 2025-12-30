@@ -6,7 +6,6 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
   Dimensions,
 } from 'react-native';
 import StarRating from 'react-native-star-rating-widget';
@@ -23,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ICONS } from '../../../assets';
 import COLORS from '../../../assets/colors';
 import { STRINGS } from '../../../assets/locales';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 type Props = { route: { params: { product: any } } };
@@ -41,31 +41,34 @@ const ProductScreen: React.FC<Props> = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        activeOpacity={0.8}
-        style={styles.backButtonWrap}
-      >
-        <Image
-          source={ICONS.backarrow}
-          style={[styles.backButtonImage, { tintColor: '#fff' }]}
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => setLiked(v => !v)}
-        activeOpacity={0.8}
-        style={styles.likeWrap}
-      >
-        <Image
-          source={ICONS.like}
-          style={[styles.likeIcon, 
-
-          { tintColor: liked ? COLORS.danger : COLORS.iconDefault },
-          ]}
-        />
-      </TouchableOpacity>
       <View style={styles.imageContainer}>
+        <View style={styles.imageOverlay}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.8}
+            style={styles.backButtonWrap}
+          >
+            <Image
+              source={ICONS.backarrow}
+              style={[styles.backButtonImage, { tintColor: '#fff' }]}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setLiked(v => !v)}
+            activeOpacity={0.8}
+            style={styles.likeWrap}
+          >
+            <Image
+              source={ICONS.like}
+              style={[
+                styles.likeIcon,
+                { tintColor: liked ? COLORS.danger : COLORS.iconDefault },
+              ]}
+            />
+          </TouchableOpacity>
+        </View>
+
         <Image source={{ uri: selectedImage }} style={styles.mainImage} />
       </View>
 
@@ -184,16 +187,12 @@ const styles = StyleSheet.create({
   },
 
   backButtonWrap: {
-    position: 'absolute',
-    top: 32,
-    left: 12,
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: COLORS.black,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 20,
   },
 
   backButtonImage: {
@@ -203,11 +202,31 @@ const styles = StyleSheet.create({
   },
 
   likeWrap: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    zIndex: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+
+  imageOverlay: {
+    position: 'absolute',
+    top: 16,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+
+  // likeWrap: { 
+  //   top: 40,
+  //   right: 20,
+  //   zIndex: 20,
+  // },
 
   likeIcon: {
     width: 25,
